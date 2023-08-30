@@ -2,6 +2,12 @@ import Card from "@/components/card";
 import Image from "next/image";
 import React from "react";
 
+interface PokemonVariety {
+  pokemon: {
+    name: string;
+  };
+}
+
 async function getData(param: string) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${param}`, {
     method: "GET",
@@ -30,7 +36,7 @@ async function Page({ params }: { params: { slug: string } }) {
   const variates = await getVariation(params.slug);
   const variant = variates
     ? variates?.varieties?.filter(
-        (data: any) => data?.pokemon?.name !== params.slug
+        (data: PokemonVariety) => data?.pokemon?.name !== params.slug
       )
     : [];
 
