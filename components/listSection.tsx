@@ -20,7 +20,9 @@ interface Row {
 }
 
 function ListSection({ min, max, keyword, handleLoad }: Props) {
-  const [collections, setCollections] = useState([]);
+  const [collections, setCollections] = useState<
+    { name: string; url: string }[]
+  >([]);
   //   const [data, setData] = useState(null);
 
   //   const fetching = async () => {
@@ -62,7 +64,7 @@ function ListSection({ min, max, keyword, handleLoad }: Props) {
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
             {collections.map((pokemon, i) => (
-              <Card data={pokemon} index={i} key={i} />
+              <Card data={pokemon} key={i} />
             ))}
           </div>
           <button

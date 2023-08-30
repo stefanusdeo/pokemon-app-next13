@@ -29,7 +29,9 @@ async function Page({ params }: { params: { slug: string } }) {
   const pokemon = await getData(params.slug);
   const variates = await getVariation(params.slug);
   const variant = variates
-    ? variates?.varieties?.filter((data) => data?.pokemon?.name !== params.slug)
+    ? variates?.varieties?.filter(
+        (data: any) => data?.pokemon?.name !== params.slug
+      )
     : [];
 
   return (
@@ -42,7 +44,7 @@ async function Page({ params }: { params: { slug: string } }) {
         height={350}
       />
       <p>Wight : {pokemon?.weight}</p>
-      {pokemon?.stats.map((status, i) => (
+      {pokemon?.stats.map((status: any, i: number) => (
         <p
           key={i}
           className=" capitalize"
@@ -54,7 +56,7 @@ async function Page({ params }: { params: { slug: string } }) {
             Varieties
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
-            {variant?.map((varian) => (
+            {variant?.map((varian: any) => (
               <Card data={varian?.pokemon} />
             ))}
           </div>
