@@ -42,22 +42,44 @@ async function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div className="flex flex-col items-center p-10">
-      <h1 className="font-medium text-4xl capitalize">{pokemon?.name}</h1>
-      <Image
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
-        alt={params.slug}
-        width={350}
-        height={350}
-      />
-      <p>Wight : {pokemon?.weight}</p>
-      {pokemon?.stats.map((status: any, i: number) => (
-        <p
-          key={i}
-          className=" capitalize"
-        >{`${status?.stat?.name} : ${status?.base_stat}`}</p>
-      ))}
+      <h1 className="font-medium text-center text-4xl capitalize">
+        {pokemon?.name}
+      </h1>
+      <div className="  w-full grid grid-cols-1 md:grid-cols-2  p-2 lg:px-20">
+        <div className="mt-20 items-center flex flex-col">
+          <Image
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
+            alt={params.slug}
+            width={350}
+            height={350}
+            className=""
+          />
+        </div>
+        <div className="justify-start w-full mt-20 bg-blue-200 rounded-md p-10">
+          {pokemon?.stats.map((status: any, i: number) => (
+            <div className="w-full grid grid-cols-2 my-2">
+              <div className=" text-left capitalize mr-4">
+                {status?.stat?.name}
+              </div>
+              <div className="mr-5 w-full">
+                <div className="flex w-full h-4 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-400">
+                  <div
+                    className="flex flex-col justify-center overflow-hidden bg-blue-500 text-xs text-white text-center"
+                    style={{
+                      width: `${status?.base_stat}%`,
+                    }}
+                  >
+                    {status?.base_stat}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {variant.length !== 0 && (
-        <div className="items-center mt-3">
+        <div className="items-center mt-5">
           <h2 className=" font-normal text-2xl capitalize text-center">
             Varieties
           </h2>
