@@ -1,16 +1,10 @@
 "use client";
-import useSWR from "swr";
-import { useState, useEffect } from "react";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 import React from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
 import Card from "./card";
 
 interface Props {
-  min: Number;
-  max: Number;
-  handleLoad: any;
   keyword: String;
 }
 
@@ -19,26 +13,26 @@ interface Row {
   url: String;
 }
 
-function ListSection({ min, max, keyword, handleLoad }: Props) {
+function ListSection({ keyword }: Props) {
   const [collections, setCollections] = useState<
     { name: string; url: string }[]
   >([]);
-  //   const [data, setData] = useState(null);
 
-  //   const fetching = async () => {
-  //     const resp = await fetch(
-  //       `https://pokeapi.co/api/v2/pokemon/${keyword}?offset=${min}&limit=${max}`,
-  //       { method: "GET" }
-  //     );
-  //     const dataJson = await resp.json();
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(24);
 
-  //     setCollections((prev) => [...collections, ...dataJson?.results]);
-  //   };
+  const handleLoad = () => {
+    setMin(min + 24);
+  };
 
-  const { data, isLoading } = useSWR(
-    `https://pokeapi.co/api/v2/pokemon/${keyword}?offset=${min}&limit=${max}`,
-    fetcher
-  );
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["get-Pokemon"],
+    queryFn: () =>
+      fetch(
+        `https://pokeapi.co/api/v2/pokemon/${keyword}?offset=${min}&limit=${max}`
+      ).then((res) => res.json()),
+  });
+
   useEffect(() => {
     if (keyword) {
       setCollections([
@@ -54,15 +48,15 @@ function ListSection({ min, max, keyword, handleLoad }: Props) {
     }
   }, [data]);
 
-  //   useEffect(() => {
-  //     fetching();
-  //   }, [min, max, keyword]);
+  useEffect(() => {
+    refetch();
+  }, [min, keyword]);
 
   return (
     <>
       {collections.length !== 0 && (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+          <div className="grid grid-cols-2 md:grid-cols-3">
             {collections.map((pokemon, i) => (
               <Card data={pokemon} key={i} />
             ))}
@@ -71,7 +65,7 @@ function ListSection({ min, max, keyword, handleLoad }: Props) {
             type="button"
             className=" ml-2 px-4 border border-blue-300 rounded-md bg-blue-300 text-white disabled:bg-gray-200"
             onClick={handleLoad}
-            disabled={isLoading}
+            disabled={isLoading || keyword !== ""}
           >
             Load More
           </button>

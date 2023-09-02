@@ -41,23 +41,25 @@ async function Page({ params }: { params: { slug: string } }) {
     : [];
 
   return (
-    <div className="flex flex-col items-center p-10">
+    <div className="flex flex-col items-center pb-5">
       <h1 className="font-medium text-center text-4xl capitalize">
         {pokemon?.name}
       </h1>
-      <div className="  w-full grid grid-cols-1 md:grid-cols-2  p-2 lg:px-20">
-        <div className="mt-20 items-center flex flex-col">
-          <Image
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
-            alt={params.slug}
-            width={350}
-            height={350}
-            className=""
-          />
+      <div className="  w-full grid grid-cols-1 md:grid-cols-2  p-2  lg:px-20">
+        <div className="mt-5 items-center justify-center flex flex-col">
+          <div className="w-40">
+            <Image
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
+              alt={params.slug}
+              width={300}
+              height={300}
+              className=""
+            />
+          </div>
         </div>
         <div className="justify-start w-full mt-20 bg-blue-200 rounded-md p-10">
           {pokemon?.stats.map((status: any, i: number) => (
-            <div className="w-full grid grid-cols-2 my-2">
+            <div className="w-full grid grid-cols-2 my-2" key={i}>
               <div className=" text-left capitalize mr-4">
                 {status?.stat?.name}
               </div>

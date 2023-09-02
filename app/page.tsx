@@ -5,24 +5,20 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
   const [pokemon, setPokemon] = useState("");
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(24);
   const [keyword, setKeyword] = useState("");
 
-  const handleLoad = () => {
-    setMin(min + 24);
-    setMax(24);
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPokemon(keyword);
+    }, 1000);
 
-  const handleSearch = () => {
-    if (!keyword) {
-      setMin(0);
-    }
-    setPokemon(keyword);
-  };
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [keyword]);
 
   return (
-    <main className="flex flex-col items-center justify-between p-10">
+    <main className="flex flex-col items-center justify-between pb-10">
       <div className="flex">
         <input
           type="text"
@@ -31,20 +27,8 @@ export default function Home() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <button
-          type="button"
-          className=" ml-2 px-4 border border-blue-300 rounded-md bg-blue-300 text-white"
-          onClick={handleSearch}
-        >
-          Search
-        </button>
       </div>
-      <ListSection
-        min={min}
-        max={max}
-        keyword={pokemon}
-        handleLoad={handleLoad}
-      />
+      <ListSection keyword={pokemon} />
     </main>
   );
 }
