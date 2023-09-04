@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   title: "Pokemon App",
   description: "This website pokemondex from Deo",
 };
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const queryClient = new QueryClient();
   return (
     <html lang="en">
       <QueryClientProvider client={queryClient}>
