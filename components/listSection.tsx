@@ -1,8 +1,15 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux/es/exports";
 import { useQuery } from "react-query";
 import Card from "./card";
+import { addPokemon } from "@/redux/slice/listSlice";
+import { AppDispatch, useAppSelector } from "@/redux/store";
+import { changePage } from "@/redux/slice/paginateSlice";
+import { removeDuplicates } from "@/utils/removeDuplicate";
+import { toast } from "react-toastify";
 
 interface Props {
   keyword: String;
@@ -14,50 +21,44 @@ interface Row {
 }
 
 function ListSection({ keyword }: Props) {
-  const [collections, setCollections] = useState<
-    { name: string; url: string }[]
-  >([]);
-
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(24);
+  const pokemons = useAppSelector((state) => state.listReducer.pokemons);
+  const page = useAppSelector((state) => state.paginateReducer.page);
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const handleLoad = () => {
-    setMin(min + 24);
+    dispatch(changePage(page + 24));
   };
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["get-Pokemon"],
+  const { data, isLoading, refetch, error } = useQuery({
+    queryKey: ["get-Pokemon", page],
     queryFn: () =>
       fetch(
-        `https://pokeapi.co/api/v2/pokemon/${keyword}?offset=${min}&limit=${max}`
+        `https://pokeapi.co/api/v2/pokemon/${keyword}?offset=${page}&limit=24`
       ).then((res) => res.json()),
   });
 
   useEffect(() => {
+    refetch();
     if (keyword) {
-      setCollections([
-        {
-          name: data?.name,
-          url: `https://pokeapi.co/api/v2/pokemon/${data?.id}/`,
-        },
-      ]);
+      if (data.name) {
+        router.push(`/detail/${data?.name}`);
+      }
     } else {
       if (data?.results) {
-        setCollections((prev) => [...prev, ...data?.results]);
+        const dataPokemon = [...pokemons, ...data?.results];
+        const uniqueData = removeDuplicates(dataPokemon, "name");
+        dispatch(addPokemon(uniqueData));
       }
     }
-  }, [data]);
-
-  useEffect(() => {
-    refetch();
-  }, [min, keyword]);
+  }, [data, keyword]);
 
   return (
     <>
-      {collections.length !== 0 && (
+      {pokemons.length !== 0 && (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3">
-            {collections.map((pokemon, i) => (
+            {pokemons.map((pokemon, i) => (
               <Card data={pokemon} key={i} />
             ))}
           </div>
