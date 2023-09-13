@@ -30,10 +30,11 @@ function Card({ data, handleLove, isLove, isDetail }: Props) {
         </>
       </Link>
       {!isDetail && (
-        <div className=" flex justify-end">
+        <div className=" flex justify-end ">
           {isLove ? (
             <Image
               alt="loveActive"
+              className="cursor-pointer"
               src={loveActive}
               width={20}
               height={20}
@@ -42,6 +43,7 @@ function Card({ data, handleLove, isLove, isDetail }: Props) {
           ) : (
             <Image
               alt="love"
+              className="cursor-pointer"
               src={love}
               width={20}
               height={20}
