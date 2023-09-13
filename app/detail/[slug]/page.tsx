@@ -41,7 +41,7 @@ async function Page({ params }: { params: { slug: string } }) {
     : [];
 
   return (
-    <div className="flex flex-col items-center pb-5">
+    <div className="flex flex-col items-center pb-20">
       <h1 className="font-medium text-center text-4xl capitalize">
         {pokemon?.name}
       </h1>
