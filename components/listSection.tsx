@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux/es/exports";
+import { useDispatch, useSelector } from "react-redux/es/exports";
 import { useQuery } from "react-query";
 import Card from "./card";
 import { addPokemon } from "@/redux/slice/listSlice";
@@ -10,6 +10,7 @@ import { AppDispatch, useAppSelector } from "@/redux/store";
 import { changePage } from "@/redux/slice/paginateSlice";
 import { removeDuplicates } from "@/utils/removeDuplicate";
 import { toast } from "react-toastify";
+import { addLove } from "@/redux/slice/lovedSlice";
 
 interface Props {
   keyword: String;
@@ -21,16 +22,16 @@ interface Row {
 }
 
 function ListSection({ keyword }: Props) {
-  const pokemons = useAppSelector((state) => state.listReducer.pokemons);
-  const page = useAppSelector((state) => state.paginateReducer.page);
+  const pokemons = useAppSelector((state) => state.list.pokemons);
+  const page = useAppSelector((state) => state.paginate.page);
+  const lovePokemons = useAppSelector((state) => state.loved.lovePokemons);
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
 
   const handleLoad = () => {
     dispatch(changePage(page + 24));
   };
 
-  const { data, isLoading, refetch, error } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["get-Pokemon", page],
     queryFn: () =>
       fetch(
@@ -42,7 +43,20 @@ function ListSection({ keyword }: Props) {
     refetch();
     if (keyword) {
       if (data.name) {
-        router.push(`/detail/${data?.name}`);
+        console.log({
+          name: data.name,
+          url: `https://pokeapi.co/api/v2/pokemon/${data.id}`,
+        });
+        dispatch(
+          addPokemon([
+            {
+              name: data.name,
+              url: `https://pokeapi.co/api/v2/pokemon/${data.id}/`,
+            },
+          ])
+        );
+      } else {
+        dispatch(addPokemon([]));
       }
     } else {
       if (data?.results) {
@@ -53,13 +67,37 @@ function ListSection({ keyword }: Props) {
     }
   }, [data, keyword]);
 
+  const onChangeLove = (type: boolean, data: { name: string; url: string }) => {
+    if (type) {
+      dispatch(addLove([...lovePokemons, data]));
+    } else {
+      const loved = lovePokemons.filter(
+        (pokemon: { name: string; url: string }) => pokemon.name !== data.name
+      );
+      dispatch(addLove(loved));
+    }
+  };
+
   return (
     <>
       {pokemons.length !== 0 && (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3">
-            {pokemons.map((pokemon, i) => (
-              <Card data={pokemon} key={i} />
+            {pokemons.map((pokemon: { name: string; url: string }, i) => (
+              <Card
+                data={pokemon}
+                key={i}
+                handleLove={onChangeLove}
+                isLove={
+                  lovePokemons.find(
+                    (data: { name: string; url: string }) =>
+                      data.name === pokemon.name
+                  )
+                    ? true
+                    : false
+                }
+                isDetail={false}
+              />
             ))}
           </div>
           <button
