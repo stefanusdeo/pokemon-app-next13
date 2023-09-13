@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import Navbar from "@/components/Navbar/navbar";
+import NavigationBottom from "@/components/Navigation/navigationBottom";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -37,6 +38,7 @@ export default function RootLayout({
             />
             <Navbar />
             <Suspense fallback={<Loading />}>{children}</Suspense>
+            <NavigationBottom />
           </ReactQuery>
         </ReduxProvider>
       </body>

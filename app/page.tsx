@@ -18,7 +18,7 @@ export default function Home() {
   }, [keyword]);
 
   return (
-    <main className="flex flex-col items-center justify-between pb-10">
+    <main className="flex flex-col items-center justify-between pb-20">
       <div className="flex">
         <input
           type="text"

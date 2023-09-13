@@ -35,7 +35,7 @@ function ListSection({ keyword }: Props) {
     queryKey: ["get-Pokemon", page],
     queryFn: () =>
       fetch(
-        `https://pokeapi.co/api/v2/pokemon/${keyword}?offset=${page}&limit=24`
+        `https://pokeapi.co/api/v2/pokemon/${keyword.toLowerCase()}?offset=${page}&limit=24`
       ).then((res) => res.json()),
   });
 

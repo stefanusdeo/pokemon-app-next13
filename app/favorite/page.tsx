@@ -28,7 +28,7 @@ function Page() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-between pb-10">
+    <main className="flex flex-col items-center justify-between pb-20">
       <>
         <div className="grid grid-cols-2 md:grid-cols-3">
           {pokemons.map((pokemon: { name: string; url: string }, i) => (
