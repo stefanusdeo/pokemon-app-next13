@@ -14,9 +14,9 @@ function Navbar() {
         </div>
         <div className="hidden md:flex justify-end">
           <ul className="flex gap-5 text-xl">
-            {/* <li className="border-collapse bg-blue-400 rounded-md p-2 text-white hover:bg-blue-500">
+            <li className="border-collapse bg-blue-400 rounded-md p-2 text-white hover:bg-blue-500">
               <Link href="/favorite">Favorite</Link>
-            </li> */}
+            </li>
           </ul>
         </div>
       </div>

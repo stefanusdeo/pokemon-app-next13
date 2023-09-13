@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import Navbar from "@/components/Navbar/navbar";
 import "./globals.css";
 import type { Metadata } from "next";
@@ -5,6 +6,7 @@ import { Inter } from "next/font/google";
 import ReactQuery from "@/components/reactQery";
 import ReduxProvider from "@/components/reduxProvider";
 import { ToastContainer } from "react-toastify";
+import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +36,7 @@ export default function RootLayout({
               closeOnClick
             />
             <Navbar />
-            {children}
+            <Suspense fallback={<Loading />}>{children}</Suspense>
           </ReactQuery>
         </ReduxProvider>
       </body>
